@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0px;
+    }
+
+    .post-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .author-date {
+        font-size: 0.9em;
+        color: #999;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        margin-top: 30px;
+        color: #333;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    #show-comment-form {
+        padding: 10px 15px;
+        margin: 20px 0;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    #show-comment-form:hover {
+        background-color: #0056b3;
+    }
+
+    #comment-form {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 5px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    button[type="submit"] {
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #218838;
+    }
+
+    .edit-delete-links {
+        margin-top: 20px;
+    }
+
+    .edit-delete-links a {
+        margin-right: 15px;
+        color: #007BFF;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .edit-delete-links a:hover {
+        color: #0056b3;
+    }
+</style>
+
+<div class="post-container">
+    <h1>{{ post.title }}</h1>
+    <p class="author-date">Автор: {{ post.author.username }} | Дата: {{ post.created_at }}</p>
+    <p>{{ post.content }}</p>
+
+    <h2>Комментарии</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment.author.username }}: {{ comment.content }}</li>
+        {% empty %}
+            <li>Нет комментариев. Будьте первым!</li>
+        {% endfor %}
+    </ul>
+
+    <button id="show-comment-form">Добавить комментарий</button>
+
+    <div id="comment-form" style="display: none;">
+        <form method="post" action="{% url 'add_comment' post.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+    <div class="edit-delete-links">
+        <a href="{% url 'post_edit' post.pk %}">Редактировать</a>
+        <a href="{% url 'post_delete' post.pk %}">Удалить</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('show-comment-form').addEventListener('click', function() {
+        var commentForm = document.getElementById('comment-form');
+        if (commentForm.style.display === 'none') {
+            commentForm.style.display = 'block';
+        } else {
+            commentForm.style.display = 'none';
+        }
+    });
+</script>
+
+{% endblock %}

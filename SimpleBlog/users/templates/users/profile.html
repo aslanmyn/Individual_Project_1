@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0px;
+    }
+
+    .profile-container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    .bio {
+        font-size: 1.2em;
+        color: #666;
+        margin: 10px 0;
+    }
+
+    .profile-picture {
+        display: block;
+        margin: 0 auto 20px auto;
+    }
+
+    .profile-picture img {
+        width: 150px;  /* Ширина изображения */
+        height: auto;  /* Высота автоматически пропорциональна ширине */
+        max-width: 100%;  /* Убедитесь, что изображение не превышает ширину контейнера */
+    }
+
+    .edit-link {
+        display: inline-block;
+        padding: 10px 15px;
+        margin-top: 20px;
+        background-color: #007BFF;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .edit-link:hover {
+        background-color: #0056b3;
+    }
+</style>
+
+<div class="profile-container">
+    <h1>Профиль {{ user.username }}</h1>
+    <p class="bio">Биография: {{ user.profile.bio }}</p>
+
+    {% if user.profile.profile_picture %}
+        <div class="profile-picture">
+            <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+        </div>
+    {% else %}
+        <p>Изображение профиля не загружено.</p>
+    {% endif %}
+
+    <a class="edit-link" href="{% url 'edit_profile' %}">Редактировать профиль</a>
+</div>
+{% endblock %}
